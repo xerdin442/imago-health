@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "es6",
+    "baseUrl": ".",
+    "outDir": "dist",
+    "sourceMap": true,
+    "esModuleInterop": true,
+    "noImplicitAny": true,
+    "typeRoots": ["node_modules/@types", "types"],
+    "types": ["node", "express"]
+  },
+  "include": ["src/**/*", "types/session.d.ts"],
+  "files": ["./src/index.ts"]
+}
