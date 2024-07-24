@@ -43,14 +43,14 @@ export const updateProfile = async (req: Request, res: Response) => {
       return res.status(400).json({ message: "Invalid user ID" })
     }
 
-    const { username, email } = req.body
+    const { fullname, email } = req.body
     let profileImage;
 
     if (req.file) {
       profileImage = req.file.path
     }
 
-    const user = await User.updateProfile(userId, { username, email, profileImage })
+    const user = await User.updateProfile(userId, { fullname, email, profileImage })
     if (!user) {
       return res.status(400).json({ message: "An error occured while creating new user" })
     }

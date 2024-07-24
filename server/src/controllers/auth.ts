@@ -7,7 +7,7 @@ import { sendEmail } from '../util/mail'
 export const register = async (req: Request, res: Response) => {
   try {
     // Extract required fields from request body
-    let { username, email, password, profileImage } = req.body
+    let { fullname, email, password, profileImage } = req.body
 
     /* Use a default image if user does not upload file
     Or set profileImage to path of stored image if user uploads file */
@@ -21,7 +21,7 @@ export const register = async (req: Request, res: Response) => {
     const hashedPassword = await bcrypt.hash(password, 12)
     const user = await User.createUser({
       email,
-      username,
+      fullname,
       password: hashedPassword,
       profileImage
     })

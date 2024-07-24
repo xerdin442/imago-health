@@ -8,6 +8,6 @@ import { handleValidationErrors, validateUpdateProfile } from '../middlewares/va
 export default (router: express.Router) => {
   router.get('/users', User.getAll);
   router.get('/users/:userId/profile', isAuthenticated, User.getProfile)
-  router.put('/users/:userId/update-profile', upload('project-manager').single('profileImage'), isAuthenticated, validateUpdateProfile, handleValidationErrors, User.updateProfile)
+  router.put('/users/:userId/update-profile', upload('gemini-folder').single('profileImage'), isAuthenticated, validateUpdateProfile, handleValidationErrors, User.updateProfile)
   router.delete('/users/:userId/delete-account', isAuthenticated, User.deleteUser)
 }
