@@ -19,7 +19,7 @@ export const sendEmail = async (receiver: IUser) => {
     // Subject and content of the email
     subject: 'Password Reset',
     htmlContent: `
-    <p>Hello ${receiver.fullname.split(' ')[0]},</p>
+    <p>Hello ${receiver.fullname.split(' ')[1]},</p>
     <h1>${receiver.resetToken}</h1>
     <p>You requested for a password reset. This code expires in <b>3 hours.</b></p>
     <p>If this wasn't you, please ignore this email.</p>
