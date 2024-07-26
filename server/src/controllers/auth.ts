@@ -25,11 +25,11 @@ export const register = async (req: Request, res: Response) => {
       password: hashedPassword,
       profileImage
     })
-    
+
     req.session.user = user
 
     // Send success message if registration is complete
-    return res.status(200).json({ message: 'Registration successful, you can now login.', user: user }).end()
+    return res.status(200).json({ message: 'Registration successful!', user: user }).end()
   } catch (error) {
     // Log and send an error message if any server errors are encountered
     console.log(error)
@@ -45,7 +45,7 @@ export const login = async (req: Request, res: Response) => {
     const user = await User.getUserByEmail(email)
     req.session.user = user
 
-    return res.status(200).json({ message: 'Login successful' }).end() // Send a success message if login is complete
+    return res.status(200).json({ message: 'Login successful!' }).end() // Send a success message if login is complete
   } catch (error) {
     // Log and send an error message if any server errors are encountered
     console.log(error)
@@ -74,7 +74,7 @@ export const resetPassword = async (req: Request, res: Response) => {
     // Find user by email address and return an error if not found
     const user = await User.getUserByEmail(email)
     if (!user) {
-      return res.status(400).send('User with that email does not exist')
+      return res.status(400).json({ message: 'User with that email does not exist' })
     }
   
     // If user check is successful, set the token, expiration time and save changes
@@ -102,7 +102,7 @@ export const checkResetToken = async (req: Request, res: Response) => {
     // Check if reset token is valid
     const user = await User.checkResetToken(resetToken)
     if (!user) {
-      return res.status(400).send('Invalid reset token')
+      return res.status(400).json({ message: 'Invalid reset token' })
     }
 
     // Check if reset token has expired
@@ -165,7 +165,7 @@ export const changePassword = async (req: Request, res: Response) => {
   
     const user = await User.checkResetToken(resetToken as string)
     if (!user) {
-      return res.status(400).send('Invalid reset token') // Send error message if reset token is invalid
+      return res.status(400).json({ message: 'Invalid reset token' }) // Send error message if reset token is invalid
     }
   
     // If reset token is valid, change password, reset the token value and save changes
@@ -175,7 +175,7 @@ export const changePassword = async (req: Request, res: Response) => {
     await user.save()
   
     // Notify user if password reset is successful
-    return res.status(200).send({ message: 'Password has been reset' })
+    return res.status(200).json({ message: 'Password has been reset' })
   } catch (error) {
     // Log and send an error message if any server errors are encountered
     console.log(error)
