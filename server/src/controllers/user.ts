@@ -63,3 +63,25 @@ export const deleteUser = async (req: Request, res: Response) => {
     return res.sendStatus(500)
   }
 }
+
+export const createMedicalRecord = async (req: Request, res: Response) => {
+  try {
+    const { userId } = req.params
+    if (!Types.ObjectId.isValid(userId)) {
+      return res.status(400).json({ message: "Invalid user ID" })
+    }
+
+    const { age, gender, country, allergies, bloodGroup, terminalIlless, acuteIllness, currentMedications, previousSurgery } = req.body
+    const details = { age, gender, country, allergies, bloodGroup, terminalIlless, acuteIllness, currentMedications, previousSurgery }
+
+    await User.createRecord({
+      user: req.session.user._id as Types.ObjectId,
+      details
+    })
+
+    return res.status(200).json({ message: "Your medical records have been successfully saved. You can change this informtion anytime in the settings page" })
+  } catch (error) {
+    console.log(error)
+    return res.sendStatus(500)
+  }
+}

@@ -1,3 +1,4 @@
+import { Record } from '../models/record';
 import { User } from '../models/user';
 
 export const getUserById = (id: string) => {
@@ -28,4 +29,14 @@ export const deleteUser = (id: string) => {
 
 export const checkResetToken = async (resetToken: string) => {
   return User.findOne({ resetToken }).select('+password')
+}
+
+export const createRecord = async (values: Record<string, any>) => {
+  const record = new Record(values)
+  if (!record) {
+    throw new Error('An error occured while creating new user')
+  }
+  await record.save();
+  
+  return record.toObject();
 }

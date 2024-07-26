@@ -6,7 +6,7 @@ import * as Chat from '../services/chat';
 export const createChat = async (req: Request, res: Response) => {
   try {
     const username = req.session.user.fullname.split(' ')[1]
-    const userId =req.session.user._id as Types.ObjectId
+    const userId = req.session.user._id as Types.ObjectId
     
     const chat = await Chat.createChat(username, userId)
 
