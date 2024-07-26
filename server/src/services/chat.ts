@@ -71,7 +71,7 @@ export const checkSymptomsFromTextInput = async (chatId: string, symptoms: strin
   }
   
   let advice: string = ''
-  for await (const chunk of result.stream) { advice += chunk }
+  for await (const chunk of result.stream) { advice += chunk.text }
 
   chat.history.push({
     role: "user",
@@ -107,7 +107,7 @@ export const checkSymptomsFromFileInput = async (chatId: string, file: Express.M
   }
 
   let symptoms: string = ''
-  for await (const chunk of audioDescription.stream) { symptoms += chunk }
+  for await (const chunk of audioDescription.stream) { symptoms += chunk.text }
 
   const chat = await Chat.findById(chatId)
   if (!chat) {
