@@ -22,15 +22,7 @@ export const validateSignup: ValidationChain[] = [
     }),
 
   check('password').trim()
-    .isLength({ min: 8 }).withMessage('Password must be at least 8 characters')
-    .custom((value: string) => {
-      const passwordStrengthCheck: RegExp = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&_])[A-Za-z\d$@$!%*?&_]{8,}$/
-      if (!passwordStrengthCheck.test(value)) {
-        throw new Error(`Password must contain at least one uppercase letter, one lowercase letter, one digit and one of the following symbols: $@$!%*?&_`)
-      }
-
-      return true;
-    }),
+    .isLength({ min: 8 }).withMessage('Password must be at least 8 characters'),
 
   check('confirmPassword').trim()
     .custom(async (value: string, { req }) => {
@@ -66,11 +58,6 @@ export const validatePasswordReset: ValidationChain[] = [
   check('password').trim()
     .isLength({ min: 8 }).withMessage('Password must be at least 8 characters')
     .custom(async (value: string, { req }) => {
-      const passwordStrengthCheck: RegExp = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&_])[A-Za-z\d$@$!%*?&_]{8,}$/
-      if (!passwordStrengthCheck.test(value)) {
-        throw new Error(`Password must contain at least one uppercase letter, one lowercase letter, one digit and one of the following symbols: $@$!%*?&_`)
-      }
-
       const user = await User.checkResetToken(req.query.resetToken as string)
       const checkMatch = await bcrypt.compare(value, user.password)
       if (checkMatch) {
