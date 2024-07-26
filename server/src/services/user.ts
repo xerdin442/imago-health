@@ -1,9 +1,5 @@
 import { User } from '../models/user';
 
-export const getAll = () => {
-  return User.find()
-}
-
 export const getUserById = (id: string) => {
   return User.findById(id)
 }

@@ -34,7 +34,7 @@ app.use(session({
   resave: false,
   saveUninitialized: false,
   store: store,
-  cookie: { maxAge: 1000 * 60 * 60 * 3, secure: false } // Set expiration time of cookie
+  cookie: { maxAge: 1000 * 60 * 60 * 24 * 30 * 6, secure: false } // Set expiration time of cookie
 }))
 
 app.use('/api', initializeRoutes()) // Configure routes

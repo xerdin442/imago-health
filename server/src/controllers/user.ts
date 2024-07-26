@@ -3,20 +3,6 @@ import { Types } from 'mongoose';
 
 import * as User from '../services/user';
 
-export const getAll = async (req: Request, res: Response) => {
-  try {
-    const users = await User.getAll()
-    if (!users) {
-      return res.status(400).json({ message: "An error occured while fetching all users" })
-    }
-
-    return res.status(200).json(users).end()
-  } catch (error) {
-    console.log(error)
-    return res.sendStatus(500)
-  }
-}
-
 export const getProfile = async (req: Request, res: Response) => {
   try {
     const { userId } = req.params

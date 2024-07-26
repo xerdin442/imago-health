@@ -62,7 +62,7 @@ export const checkSymptomsFromTextInput = async (chatId: string, symptoms: strin
     throw new Error('Error generating response')
   }
   
-  let advice = ''
+  let advice: string = ''
   for await (const chunk of result.stream) { advice += chunk }
 
   chat.history.push({
@@ -98,7 +98,7 @@ export const checkSymptomsFromFileInput = async (chatId: string, file: Express.M
     throw new Error('Error parsing information from audio')
   }
 
-  let symptoms = ''
+  let symptoms: string = ''
   for await (const chunk of audioDescription.stream) { symptoms += chunk }
 
   const chat = await Chat.findById(chatId)
@@ -112,7 +112,7 @@ export const checkSymptomsFromFileInput = async (chatId: string, file: Express.M
     throw new Error('Error generating response')
   }
   
-  let advice = ''
+  let advice: string = ''
   for await (const chunk of result.stream) { advice += chunk }
 
   chat.history.push({
