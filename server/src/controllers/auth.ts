@@ -77,7 +77,7 @@ export const resetPassword = async (req: Request, res: Response) => {
   
     // If user check is successful, set the token, expiration time and save changes
     user.resetToken = token
-    user.resetTokenExpiration = Date.now() + 90000
+    user.resetTokenExpiration = Date.now() + (3 * 60 * 60 * 1000)
     await user.save()
   
     await sendEmail(user) // Send reset token to the user's email address
@@ -119,7 +119,7 @@ export const checkResetToken = async (req: Request, res: Response) => {
     })
 
     // Return redirect URL containing user's reset token
-    const redirectURL = `http://localhost:3000/api/auth/change-password?resetToken=${user.resetToken}`
+    const redirectURL = `https://imago-health.onrender.com/api/auth/change-password?resetToken=${user.resetToken}`
     
     return res.status(200).json({ redirectURL })
   } catch (error) {
