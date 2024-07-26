@@ -25,6 +25,8 @@ export const register = async (req: Request, res: Response) => {
       password: hashedPassword,
       profileImage
     })
+    
+    req.session.user = user
 
     // Send success message if registration is complete
     return res.status(200).json({ message: 'Registration successful, you can now login.', user: user }).end()
