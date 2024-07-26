@@ -34,6 +34,7 @@ export const createChat = async (username: string, userId: Types.ObjectId) => {
       }
     ],
   })
+  await chat.save()
 
   return chat
 }
