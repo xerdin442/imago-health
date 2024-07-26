@@ -75,14 +75,6 @@ export const validateUpdateProfile: ValidationChain[] = [
 
   check('email').normalizeEmail()
     .isEmail().withMessage('Please enter a valid email')
-    .custom(async (value: string) => {
-      const user = await User.getUserByEmail(value)
-      if (user) {
-        throw new Error('User with that email address already exists')
-      }
-
-      return true;
-    }),
 ]
 
 export const handleValidationErrors = (req: Request, res: Response, next: NextFunction) => {
