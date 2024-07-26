@@ -57,8 +57,14 @@ export const checkSymptomsFromTextInput = async (chatId: string, symptoms: strin
     throw new Error('Chat details not found')
   }
 
-  console.log(chat.history)
-  const response = model.startChat({ history: chat.history })
+  const cleanHistory = chat.history.map(({ role, parts }) => ({
+    role,
+    parts: parts.map(part => ({
+      text: part.text  // Only include necessary fields
+    }))
+  }));
+
+  const response = model.startChat({ history: cleanHistory })
   const result = await response.sendMessageStream([symptoms, prompt]);
   if (!result) {
     throw new Error('Error generating response')
@@ -108,7 +114,14 @@ export const checkSymptomsFromFileInput = async (chatId: string, file: Express.M
     throw new Error('Chat details not found')
   }
 
-  const response = model.startChat({ history: chat.history })
+  const cleanHistory = chat.history.map(({ role, parts }) => ({
+    role,
+    parts: parts.map(part => ({
+      text: part.text  // Only include necessary fields
+    }))
+  }));
+
+  const response = model.startChat({ history: cleanHistory })
   const result = await response.sendMessageStream([symptoms, prompt]);
   if (!result) {
     throw new Error('Error generating response')
