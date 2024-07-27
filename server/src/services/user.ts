@@ -40,3 +40,7 @@ export const createRecord = async (values: Record<string, any>) => {
   
   return record.toObject();
 }
+
+export const updateRecord = async (id: string, values: Record<string, any>) => {
+  return Record.findByIdAndUpdate(id, values, { new: true })
+}
