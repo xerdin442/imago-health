@@ -68,13 +68,6 @@ export const getChatHistory = async (chatId: string) => {
 }
 
 export const checkSymptomsFromAudioInput = async (chatId: string, file: Express.Multer.File) => {  
-  const mimetypes: string[] = ['audio/wav', 'audio/mp3', 'audio/aiff', 'audio/aac', 'audio/ogg', 'audio/flac']
-  
-  const isValidFile = mimetypes.some(type => type === file.mimetype)
-  if (!isValidFile) {
-    throw new Error('Audio format is not supported')
-  }
-
   const audioDescription = await model.generateContentStream([
     {
       fileData: {

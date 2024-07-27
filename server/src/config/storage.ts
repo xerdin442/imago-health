@@ -12,10 +12,22 @@ cloudinary.config({
 });
 
 export const upload = (folderName: string) => {
+  const audioMimetypes: string[] = ['audio/wav', 'audio/mp3', 'audio/aiff', 'audio/aac', 'audio/ogg', 'audio/flac']
+  const imageMimetypes: string[] = ['image/png', 'image/jpg', 'image/jpeg']
+
   const storage = new CloudinaryStorage({
     cloudinary: cloudinary,
     params: (req, file) => {
       const public_id = new Date().toISOString().replace(/:/g, '-') + '-' + file.originalname;
+      
+      if (audioMimetypes.some(type => type === file.mimetype)) {
+        return {
+          folder: folderName,
+          public_id,
+          resource_type: 'audio',
+          bitrate: 32000 // Adjust the bitrate of the audio file to enhance processing
+        };
+      }
       
       return {
         folder: folderName,
@@ -29,7 +41,7 @@ export const upload = (folderName: string) => {
   });
 
   const fileFilter = (req: Request, file: Express.Multer.File, cb: multer.FileFilterCallback) => {
-    if (file.mimetype === 'image/png' || file.mimetype === 'image/jpg' || file.mimetype === 'image/jpeg') {
+    if (audioMimetypes.some(type => type === file.mimetype) || imageMimetypes.some(type => type === file.mimetype)) {
       cb(null, true);
     } else {
       cb(null, false);
