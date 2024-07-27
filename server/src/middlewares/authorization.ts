@@ -3,7 +3,7 @@ import { Request, Response, NextFunction } from 'express'
 export const isLoggedIn = (req: Request, res: Response, next: NextFunction) => {
   // Check if user object is available in session to confirm if user is logged in
   if (!(req.session.user)) {
-    return res.redirect('/auth/login')
+    return res.status(401).json({ message: "You are not logged in" })
   }
 
   next()
