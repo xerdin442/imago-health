@@ -83,6 +83,7 @@ export const checkSymptomsFromAudioInput = async (chatId: string, file: Express.
 
   let symptoms: string = ''
   for await (const chunk of audioDescription.stream) { symptoms += chunk.text() }
+  console.log(symptoms)
 
   return await continueChat(symptoms, chatId)
 }
