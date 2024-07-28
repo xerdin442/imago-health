@@ -18,6 +18,7 @@ export const upload = (folderName: string) => {
   const storage = new CloudinaryStorage({
     cloudinary: cloudinary,
     params: (req, file) => {
+      console.log(file.path)
       const public_id = new Date().toISOString().replace(/:/g, '-') + '-' + file.originalname;
       
       if (audioMimetypes.includes(file.mimetype)) {

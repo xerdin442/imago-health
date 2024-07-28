@@ -68,6 +68,7 @@ export const getChatHistory = async (chatId: string) => {
 }
 
 export const checkSymptomsFromAudioInput = async (chatId: string, file: Express.Multer.File) => {  
+  console.log('audio service', file.path)
   const audioDescription = await model.generateContentStream([
     {
       fileData: {
