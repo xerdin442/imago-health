@@ -70,7 +70,7 @@ export const getChatHistory = async (chatId: string) => {
 }
 
 export const checkSymptomsFromAudioInput = async (chatId: string) => {
-  const audioFile = await fileManager.uploadFile('../audio/symptoms', { mimeType: 'audio/x-acc' || 'audio/acc' })
+  const audioFile = await fileManager.uploadFile('../audio/symptoms', { mimeType: 'audio/x-aac' || 'audio/aac' })
 
   const audioDescription = await model.generateContentStream([
     {
