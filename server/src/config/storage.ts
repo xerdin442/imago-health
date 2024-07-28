@@ -24,7 +24,7 @@ export const upload = (folderName: string) => {
         return {
           folder: folderName,
           public_id,
-          resource_type: 'audio',
+          resource_type: 'auto',
           bitrate: 32000 // Adjust the bitrate of the audio file to enhance processing
         };
       }
