@@ -1,10 +1,12 @@
 import { GoogleGenerativeAI } from "@google/generative-ai"
+import { GoogleAIFileManager } from "@google/generative-ai/server";
 import { Types } from "mongoose"
 
 import { Chat } from "../models/chat"
 
 const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY)
 const model = genAI.getGenerativeModel({ model: "gemini-1.5-pro" })
+const fileManager = new GoogleAIFileManager(process.env.API_KEY);
 
 export const createChat = async (userId: Types.ObjectId, prompt: string) => {
   const chat = new Chat({
@@ -67,13 +69,14 @@ export const getChatHistory = async (chatId: string) => {
   return history;
 }
 
-export const checkSymptomsFromAudioInput = async (chatId: string, file: Express.Multer.File) => {  
-  console.log('audio service', file.path)
+export const checkSymptomsFromAudioInput = async (chatId: string) => {
+  const audioFile = await fileManager.uploadFile('../audio/symptoms', { mimeType: 'audio/x-acc' || 'audio/acc' })
+
   const audioDescription = await model.generateContentStream([
     {
       fileData: {
-        mimeType: file.mimetype,
-        fileUri: file.path
+        mimeType: audioFile.file.mimeType,
+        fileUri: audioFile.file.uri
       }
     },
     { text: "Generate a transcript of the speech" },
@@ -84,7 +87,6 @@ export const checkSymptomsFromAudioInput = async (chatId: string, file: Express.
 
   let symptoms: string = ''
   for await (const chunk of audioDescription.stream) { symptoms += chunk.text() }
-  console.log(symptoms)
 
   return await continueChat(symptoms, chatId)
 }
