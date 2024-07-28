@@ -20,11 +20,11 @@ export const upload = (folderName: string) => {
     params: (req, file) => {
       const public_id = new Date().toISOString().replace(/:/g, '-') + '-' + file.originalname;
       
-      if (audioMimetypes.some(type => type === file.mimetype)) {
+      if (audioMimetypes.includes(file.mimetype)) {
         return {
           folder: folderName,
           public_id,
-          resource_type: 'auto',
+          resource_type: 'video',
           bitrate: 32000 // Adjust the bitrate of the audio file to enhance processing
         };
       }
@@ -41,7 +41,7 @@ export const upload = (folderName: string) => {
   });
 
   const fileFilter = (req: Request, file: Express.Multer.File, cb: multer.FileFilterCallback) => {
-    if (audioMimetypes.some(type => type === file.mimetype) || imageMimetypes.some(type => type === file.mimetype)) {
+    if (audioMimetypes.includes(file.mimetype) || imageMimetypes.includes(file.mimetype)) {
       cb(null, true);
     } else {
       cb(null, false);
