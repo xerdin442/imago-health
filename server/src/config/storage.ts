@@ -12,7 +12,19 @@ cloudinary.config({
 });
 
 export const upload = (folderName: string) => {
-  const audioMimetypes: string[] = ['audio/wav', 'audio/mp3', 'audio/aiff', 'audio/aac', 'audio/ogg', 'audio/flac']
+  const audioMimetypes: string[] = ['audio/mpeg',  // MP3
+  'audio/mp3',
+  'audio/wav',
+  'audio/x-wav',
+  'audio/aiff',
+  'audio/x-aiff',
+  'audio/aac',
+  'audio/x-aac',
+  'audio/ogg',
+  'audio/flac',
+  'audio/x-flac',
+  'audio/mp4',
+  'audio/x-m4a']
   const imageMimetypes: string[] = ['image/png', 'image/jpg', 'image/jpeg']
 
   const storage = new CloudinaryStorage({
