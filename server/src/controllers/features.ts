@@ -66,6 +66,7 @@ export const healthAssistant = async (req: Request, res: Response) => {
       await Chat.continueChat(symptoms, chatId)
     }
 
+    console.log(req.file.path, req.file.mimetype, chatId)
     if (req.file) {
       await Chat.checkSymptomsFromAudioInput(chatId, req.file)
     }
