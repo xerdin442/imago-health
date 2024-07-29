@@ -6,7 +6,7 @@ export const getUserById = (id: string) => {
 }
 
 export const getUserByEmail = (email: string) => {
-  return User.findOne({ email: email });
+  return User.findOne({ email });
 }
 
 export const createUser = async (values: Record<string, any>) => {

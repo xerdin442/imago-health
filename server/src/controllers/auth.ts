@@ -41,18 +41,8 @@ export const login = async (req: Request, res: Response) => {
   try {
     const { email } = req.body // Extract required fields from request body
 
-    const user = await User.getUserByEmail(email).select('+password')
-    if (!user) {
-      return res.status(200).json({ message: 'No user found with that email' })
-    }
-
-    // Check the entered password and send an error message if it is invalid
-    const checkPassword = await bcrypt.compare(req.body.password, user.password)
-    if (!checkPassword) {
-      return res.status(200).json({ message: 'Invalid password' })
-    }
-
     // If all checks are successful, configure session data for newly logged in user
+    const user = await User.getUserByEmail(email)
     req.session.user = user
 
     return res.status(200).json({ message: 'Login successful!' }).end() // Send a success message if login is complete

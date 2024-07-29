@@ -1,12 +1,12 @@
 import { GoogleGenerativeAI } from "@google/generative-ai"
-import { GoogleAIFileManager } from "@google/generative-ai/server";
 import { Types } from "mongoose"
+import fs from 'fs'
+import path from "path";
 
 import { Chat } from "../models/chat"
 
-const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY)
+const genAI = new GoogleGenerativeAI('AIzaSyBaKaioMRVz-dwagdtapR3j08vpt7Mwkqo')
 const model = genAI.getGenerativeModel({ model: "gemini-1.5-pro" })
-const fileManager = new GoogleAIFileManager(process.env.API_KEY);
 
 export const createChat = async (userId: Types.ObjectId, prompt: string) => {
   const chat = new Chat({
@@ -69,24 +69,48 @@ export const getChatHistory = async (chatId: string) => {
   return history;
 }
 
-export const checkSymptomsFromAudioInput = async (chatId: string) => {
-  const audioFile = await fileManager.uploadFile('../audio/symptoms', { mimeType: 'audio/x-aac' || 'audio/aac' })
-
-  const audioDescription = await model.generateContentStream([
-    {
-      fileData: {
-        mimeType: audioFile.file.mimeType,
-        fileUri: audioFile.file.uri
-      }
-    },
-    { text: "Generate a transcript of the speech" },
-  ]); 
-  if (!audioDescription) {
-    throw new Error('Error parsing information from audio')
+export const drugVetting = async (userId: Types.ObjectId) => {
+  // Converts local file information to a GoogleGenerativeAI.Part object.
+  function fileToGenerativePart(path: string, mimeType: string) {
+    return {
+      inlineData: {
+        data: Buffer.from(fs.readFileSync(path)).toString("base64"),
+        mimeType
+      },
+    };
   }
 
-  let symptoms: string = ''
-  for await (const chunk of audioDescription.stream) { symptoms += chunk.text() }
+  const filePath = path.join(__dirname, '../', 'images/drugImage')
+  const mimeType = 'image/png' || 'image/jpg' || 'image/jpeg'
+  const imageParts = fileToGenerativePart(filePath, mimeType)
+  const prompt = 'Identify and describe the drug in the image. State its content, functions and side-effects, if any.'
+  
+  const result = await model.generateContentStream([prompt, imageParts]);
+  if (!result) {
+    throw new Error('Error generating response')
+  }
 
-  return await continueChat(symptoms, chatId)
+  let description: string = ''
+  for await (const chunk of result.stream) { description += chunk.text() }
+
+  const chat = new Chat({
+    user: userId,
+    history: [
+      {
+        role: "model",
+        parts: [{ text: description }],
+      }
+    ],
+  })
+  return await chat.save()
+}
+
+export const getDrugDescription = async (chatId: string) => {
+  const chat = await Chat.findById(chatId)
+  if (!chat) {
+    throw new Error('Chat details not found')
+  }
+  const history = chat.history[0].parts[0].text
+
+  return history;
 }

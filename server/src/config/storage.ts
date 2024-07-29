@@ -45,21 +45,20 @@ export const upload = (folderName: string) => {
   });
 };
 
-export const uploadAudio = () => {
-  const audioMimetypes: string[] = ['audio/mpeg', 'audio/mp3', 'audio/wav', 'audio/x-wav', 'audio/aiff', 'audio/x-aiff', 'audio/aac', 'audio/x-aac',
-    'audio/ogg', 'audio/flac', 'audio/x-flac', 'audio/mp4', 'audio/x-m4a']
+export const uploadDrug = () => {
+  const imageMimetypes: string[] = ['image/png', 'image/jpg', 'image/jpeg']
 
-  const audioStorage = multer.diskStorage({
+  const localStorage = multer.diskStorage({
     destination: (req, file, cb) => {
-      cb(null, '../audio/')
+      cb(null, 'src/images/')
     },
     filename: (req, file, cb) => {
-      cb(null, 'symptoms')
+      cb(null, 'drugImage')
     }
   })
 
   const fileFilter = (req: Request, file: Express.Multer.File, cb: multer.FileFilterCallback) => {
-    if (audioMimetypes.includes(file.mimetype)) {
+    if (imageMimetypes.includes(file.mimetype)) {
       cb(null, true);
     } else {
       cb(null, false);
@@ -67,7 +66,7 @@ export const uploadAudio = () => {
   };
 
   return multer({
-    storage: audioStorage,
+    storage: localStorage,
     limits: { fieldSize: 5 * 1024 * 1024 }, // Image sizes must be less than 5MB
     fileFilter
   });
