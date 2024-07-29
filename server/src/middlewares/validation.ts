@@ -36,7 +36,6 @@ export const validateSignup: ValidationChain[] = [
 
 export const validateLogin: ValidationChain[] = [
   check('email').normalizeEmail()
-    .isEmail().withMessage('Please enter a valid email')
     .custom(async (value: string, { req }) => {
       // Check the email and send an error message if it does not exist
       const user = await User.getUserByEmail(value).select('+password')

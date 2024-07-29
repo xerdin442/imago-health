@@ -51,7 +51,7 @@ export const uploadAudio = () => {
 
   const audioStorage = multer.diskStorage({
     destination: (req, file, cb) => {
-      cb(null, 'audio/')
+      cb(null, '../audio/')
     },
     filename: (req, file, cb) => {
       cb(null, 'symptoms')
