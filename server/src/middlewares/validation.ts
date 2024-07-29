@@ -34,25 +34,6 @@ export const validateSignup: ValidationChain[] = [
     })
 ]
 
-export const validateLogin: ValidationChain[] = [
-  check('email').normalizeEmail()
-    .custom(async (value: string, { req }) => {
-      // Check the email and send an error message if it does not exist
-      const user = await User.getUserByEmail(value).select('+password')
-      if (!user) {
-        throw new Error('No user found with that email')
-      }
-
-      // Check the entered password and send an error message if it is invalid
-      const checkPassword = await bcrypt.compare(req.body.password, user.password)
-      if (!checkPassword) {
-        throw new Error('Invalid password')
-      }
-
-      return true;
-    })
-]
-
 export const validatePasswordReset: ValidationChain[] = [
   check('password').trim()
     .isLength({ min: 8 }).withMessage('Password must be at least 8 characters')
