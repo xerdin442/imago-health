@@ -1,5 +1,6 @@
 import { Record } from '../models/record';
 import { User } from '../models/user';
+import { Newsletter } from "../models/newsletter";
 
 export const getUserById = (id: string) => {
   return User.findById(id)
@@ -43,4 +44,12 @@ export const createRecord = async (values: Record<string, any>) => {
 
 export const updateRecord = async (id: string, values: Record<string, any>) => {
   return Record.findByIdAndUpdate(id, values, { new: true })
+}
+
+export const getAllLetters = async () => {
+  return Newsletter.find()
+}
+
+export const getLetterById = async (id: string) => {
+  return Newsletter.findById(id)
 }

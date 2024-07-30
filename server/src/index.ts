@@ -11,6 +11,7 @@ import dotenv from 'dotenv';
 
 import initializeRoutes from './routes/index';
 import sessionDts from '../types/session'
+import { publishLetter } from './util/newsletter';
 
 const app = express()
 
@@ -41,8 +42,10 @@ app.use('/api', initializeRoutes()) // Configure routes
 
 // Connect to database and start the server
 mongoose.connect(process.env.MONGO_URI)
-  .then(() => {
+  .then(async () => {
     app.listen(process.env.PORT)
+    await publishLetter()
+    
     console.log('Server is running on port 3000')
   })
   .catch(err => console.log(err))

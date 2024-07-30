@@ -102,3 +102,36 @@ export const updateMedicalRecord = async (req: Request, res: Response) => {
     return res.sendStatus(500)
   }
 }
+
+export const getAllLetters = async (req: Request, res: Response) => {
+  try {
+    const newsletters = await User.getAllLetters()
+    if (!newsletters) {
+      return res.status(400).json({ message: "An error occured while retreiving all newsletters" })
+    }
+
+    return res.status(200).json(newsletters).end()
+  } catch (error) {
+    console.log(error)
+    return res.sendStatus(500)
+  }
+}
+
+export const getLetter = async (req: Request, res: Response) => {
+  try {
+    const { newsletterId } = req.params
+    if (!Types.ObjectId.isValid(newsletterId)) {
+      return res.status(400).json({ message: "Invalid newsletter ID" })
+    }
+    
+    const newsletter = await User.getLetterById(newsletterId)
+    if (!newsletter) {
+      return res.status(400).json({ message: "An error occured while fetching newsletter" })
+    }
+
+    return res.status(200).json(newsletter).end()
+  } catch (error) {
+    console.log(error)
+    return res.sendStatus(500)
+  }
+}

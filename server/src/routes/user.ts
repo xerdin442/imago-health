@@ -1,7 +1,7 @@
 import express from 'express';
 
 import * as User from '../controllers/user';
-import { isAuthenticated } from '../middlewares/authorization';
+import { isAuthenticated, isLoggedIn } from '../middlewares/authorization';
 import { upload } from '../config/storage';
 import { handleValidationErrors, validateUpdateProfile } from '../middlewares/validation';
 
@@ -13,4 +13,8 @@ export default (router: express.Router) => {
   // Medical records
   router.post('/records/create-record',  User.createMedicalRecord)
   router.put('/records/:recordId/update-record', User.updateMedicalRecord)
+
+  // Newsletter
+  router.get('/newsletters', isLoggedIn, User.getAllLetters)
+  router.get('/newsletters/:newsletterId', isLoggedIn, User.getLetter)
 }
