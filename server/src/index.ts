@@ -44,8 +44,9 @@ app.use('/api', initializeRoutes()) // Configure routes
 mongoose.connect(process.env.MONGO_URI)
   .then(async () => {
     app.listen(process.env.PORT)
+    console.log(new Date())
     await publishLetter()
-    
+
     console.log('Server is running on port 3000')
   })
   .catch(err => console.log(err))
