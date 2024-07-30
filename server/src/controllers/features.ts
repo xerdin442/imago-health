@@ -64,7 +64,7 @@ export const healthAssistant = async (req: Request, res: Response) => {
     const { symptoms } = req.body
     const response = await Chat.continueChat(symptoms, chatId)
 
-    return res.status(200).json({ response })
+    return res.status(200).json({ response }).end()
   } catch (error) {
     console.log(error)
     return res.sendStatus(500)
@@ -76,7 +76,7 @@ export const drugVetting = async (req: Request, res: Response) => {
     const userId = req.session.user._id as Types.ObjectId
     const chat = await Chat.drugVetting(userId, req.file)
 
-    return res.status(200).json({ chatId: chat._id })
+    return res.status(200).json({ chatId: chat._id }).end()
   } catch (error) {
     console.log(error)
     return res.sendStatus(500)

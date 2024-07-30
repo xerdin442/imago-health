@@ -62,7 +62,7 @@ export const logout = (req: Request, res: Response) => {
       return res.sendStatus(500)
     }
 
-    return res.status(200).json({ message: 'You logged out' })
+    return res.status(200).json({ message: 'You logged out' }).end()
   })
 }
 
@@ -123,7 +123,7 @@ export const checkResetToken = async (req: Request, res: Response) => {
     // Return redirect URL containing user's reset token
     const redirectURL = `https://imago-health.onrender.com/api/auth/change-password?resetToken=${user.resetToken}`
     
-    return res.status(200).json({ redirectURL })
+    return res.status(200).json({ redirectURL }).end()
   } catch (error) {
     // Log and send an error message if any server errors are encountered
     console.log(error)
@@ -149,7 +149,7 @@ export const resendToken = async (req: Request, res: Response) => {
 
     console.log(token)
     // Notify user that password reset token has been re-sent
-    return res.status(200).json({ message: 'Another token has been sent to your email' })
+    return res.status(200).json({ message: 'Another token has been sent to your email' }).end()
   } catch (error) {
     // Log and send an error message if any server errors are encountered
     console.log(error)
@@ -175,7 +175,7 @@ export const changePassword = async (req: Request, res: Response) => {
     await user.save()
   
     // Notify user if password reset is successful
-    return res.status(200).json({ message: 'Password has been reset' })
+    return res.status(200).json({ message: 'Password has been reset' }).end()
   } catch (error) {
     // Log and send an error message if any server errors are encountered
     console.log(error)

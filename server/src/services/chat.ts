@@ -9,6 +9,7 @@ const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY)
 const model = genAI.getGenerativeModel({ model: "gemini-1.5-pro" })
 
 export const createChat = async (userId: Types.ObjectId, prompt: string) => {
+  // Create a new chat and add the initial promppt to the conversation history
   const chat = new Chat({
     user: userId,
     history: [
@@ -24,15 +25,17 @@ export const createChat = async (userId: Types.ObjectId, prompt: string) => {
   })
   await chat.save()
 
-  return chat
+  return chat;
 }
 
 export const continueChat = async (symptoms: string, chatId: string) => {
+  // Find chat by specified ID and throw an error if not found
   const chat = await Chat.findById(chatId)
   if (!chat) {
     throw new Error('Chat details not found')
   }
 
+  // Sanitize the chat history for use by the model
   const chatHistory = chat.history.map(({ role, parts }) => ({
     role,
     parts: parts.map(part => ({
@@ -40,15 +43,16 @@ export const continueChat = async (symptoms: string, chatId: string) => {
     }))
   }));
 
-  const response = model.startChat({ history: chatHistory })
-  const result = await response.sendMessageStream(symptoms);
+  const response = model.startChat({ history: chatHistory }) // Populate the chat history of the conversation with the model
+  const result = await response.sendMessageStream(symptoms); // Send a new message to the model
   if (!result) {
     throw new Error('Error generating response')
   }
 
   let advice: string = ''
-  for await (const chunk of result.stream) { advice += chunk.text() }
+  for await (const chunk of result.stream) { advice += chunk.text() } // Extract text content from the response stream
 
+  // Add the symptoms and the model's response to the history of the current conversation
   chat.history.push({
     role: "user",
     parts: [{ text: symptoms }]
@@ -58,14 +62,17 @@ export const continueChat = async (symptoms: string, chatId: string) => {
   })
   await chat.save()
 
-  return advice;
+  return advice; // Return the model's response
 }
 
 export const getChatHistory = async (chatId: string) => {
+  // Find chat by specified ID and throw an error if not found
   const chat = await Chat.findById(chatId)
   if (!chat) {
     throw new Error('Chat details not found')
   }
+
+  // Exclude the initial prompt to the model and return the remaining messages in the conversation
   const history = chat.history.slice(2).map(chat => chat.parts[0].text)
 
   return history;
@@ -108,11 +115,12 @@ export const drugVetting = async (userId: Types.ObjectId, file: Express.Multer.F
 }
 
 export const getDrugDescription = async (chatId: string) => {
+  // Find chat by specified ID and throw an error if not found
   const chat = await Chat.findById(chatId)
   if (!chat) {
     throw new Error('Chat details not found')
   }
-  const history = chat.history[0].parts[0].text
+  const history = chat.history[0].parts[0].text // Retrieve the description text from the chat history
 
   return history;
 }

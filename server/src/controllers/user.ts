@@ -15,7 +15,7 @@ export const getProfile = async (req: Request, res: Response) => {
       return res.status(400).json({ message: "An error occured while fetching user details" })
     }
 
-    return res.status(200).json(user).end()
+    return res.status(200).json({ user }).end()
   } catch (error) {
     console.log(error)
     return res.sendStatus(500)
@@ -41,7 +41,7 @@ export const updateProfile = async (req: Request, res: Response) => {
       return res.status(400).json({ message: "An error occured while creating new user" })
     }
   
-    return res.status(200).json(user).end()
+    return res.status(200).json({ user }).end()
   } catch (error) {
     console.log(error)
     return res.sendStatus(500) 
@@ -57,7 +57,7 @@ export const deleteUser = async (req: Request, res: Response) => {
 
     await User.deleteUser(userId)
 
-    return res.status(200).json({ message: 'User successfully deleted' })
+    return res.status(200).json({ message: 'User successfully deleted' }).end()
   } catch (error) {
     console.log(error)
     return res.sendStatus(500)
@@ -74,7 +74,7 @@ export const createMedicalRecord = async (req: Request, res: Response) => {
       details
     })
 
-    return res.status(200).json({ message: "Your medical records have been successfully saved. You can change this informtion anytime in the settings page" })
+    return res.status(200).json({ message: "Your medical records have been successfully saved. You can change this informtion anytime in the settings page" }).end()
   } catch (error) {
     console.log(error)
     return res.sendStatus(500)
@@ -96,7 +96,7 @@ export const updateMedicalRecord = async (req: Request, res: Response) => {
       details
     })
 
-    return res.status(200).json({ message: "Your medical records have been updated!" })
+    return res.status(200).json({ message: "Your medical records have been updated!" }).end()
   } catch (error) {
     console.log(error)
     return res.sendStatus(500)
@@ -110,7 +110,7 @@ export const getAllLetters = async (req: Request, res: Response) => {
       return res.status(400).json({ message: "An error occured while retreiving all newsletters" })
     }
 
-    return res.status(200).json(newsletters).end()
+    return res.status(200).json({ newsletters }).end()
   } catch (error) {
     console.log(error)
     return res.sendStatus(500)
@@ -129,7 +129,7 @@ export const getLetter = async (req: Request, res: Response) => {
       return res.status(400).json({ message: "An error occured while fetching newsletter" })
     }
 
-    return res.status(200).json(newsletter).end()
+    return res.status(200).json({ newsletter }).end()
   } catch (error) {
     console.log(error)
     return res.sendStatus(500)

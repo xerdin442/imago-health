@@ -30,6 +30,7 @@ export const upload = (folderName: string) => {
     }
   });
 
+  // Function to validate the format of the file in the incoming request
   const fileFilter = (req: Request, file: Express.Multer.File, cb: multer.FileFilterCallback) => {
     if (imageMimetypes.includes(file.mimetype)) {
       cb(null, true);
