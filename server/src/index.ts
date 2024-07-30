@@ -46,7 +46,7 @@ mongoose.connect(process.env.MONGO_URI)
     app.listen(process.env.PORT)
 
     // The model publishes a new article every five days
-    setInterval(() => { return createLetter() }, 5 * 24 * 60 * 60000)
+    setInterval(() => { return createLetter() }, 6 * 60 * 60000)
 
     console.log('Server is running on port 3000')
   })
