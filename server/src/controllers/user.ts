@@ -96,7 +96,7 @@ export const updateMedicalRecord = async (req: Request, res: Response) => {
       details
     })
 
-    return res.status(200).json({ message: "Your medical records have been successfully saved. You can change this informtion anytime in the settings page" })
+    return res.status(200).json({ message: "Your medical records have been updated!" })
   } catch (error) {
     console.log(error)
     return res.sendStatus(500)

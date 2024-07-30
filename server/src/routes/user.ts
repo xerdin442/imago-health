@@ -11,6 +11,6 @@ export default (router: express.Router) => {
   router.delete('/users/:userId/delete-account', isAuthenticated, User.deleteUser)
 
   // Medical records
-  router.post('/records/create-record', isAuthenticated, User.createMedicalRecord)
-  router.put('/records/:recordId/update-record', isAuthenticated, User.updateMedicalRecord)
+  router.post('/records/create-record',  User.createMedicalRecord)
+  router.put('/records/:recordId/update-record', User.updateMedicalRecord)
 }
