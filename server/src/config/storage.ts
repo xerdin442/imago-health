@@ -53,7 +53,7 @@ export const uploadDrug = () => {
       cb(null, 'src/images/')
     },
     filename: (req, file, cb) => {
-      cb(null, 'drugImage')
+      cb(null, file.originalname)
     }
   })
 

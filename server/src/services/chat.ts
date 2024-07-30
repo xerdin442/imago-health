@@ -4,6 +4,7 @@ import fs from 'fs'
 import path from "path";
 
 import { Chat } from "../models/chat"
+import { drugVettingPrompt } from "../util/prompts";
 
 const genAI = new GoogleGenerativeAI('AIzaSyBaKaioMRVz-dwagdtapR3j08vpt7Mwkqo')
 const model = genAI.getGenerativeModel({ model: "gemini-1.5-pro" })
@@ -69,7 +70,7 @@ export const getChatHistory = async (chatId: string) => {
   return history;
 }
 
-export const drugVetting = async (userId: Types.ObjectId) => {
+export const drugVetting = async (userId: Types.ObjectId, file: Express.Multer.File) => {
   // Converts local file information to a GoogleGenerativeAI.Part object.
   function fileToGenerativePart(path: string, mimeType: string) {
     return {
@@ -80,25 +81,27 @@ export const drugVetting = async (userId: Types.ObjectId) => {
     };
   }
 
-  const filePath = path.join(__dirname, '../', 'images/drugImage')
+  const filePath = path.join(__dirname, '../', `images/${file.originalname}`)
   const mimeType = 'image/png' || 'image/jpg' || 'image/jpeg'
   const imageParts = fileToGenerativePart(filePath, mimeType)
-  const prompt = 'Identify and describe the drug in the image. State its content, functions and side-effects, if any.'
+  const prompt = await drugVettingPrompt(userId)
   
-  const result = await model.generateContentStream([prompt, imageParts]);
+  const result = await model.generateContent([prompt, imageParts]);
   if (!result) {
     throw new Error('Error generating response')
   }
 
-  let description: string = ''
-  for await (const chunk of result.stream) { description += chunk.text() }
+  // Delete the image to free up memory space
+  fs.unlink(filePath, (err) => {
+    if (err) { throw new Error(err.message) }
+  })
 
   const chat = new Chat({
     user: userId,
     history: [
       {
         role: "model",
-        parts: [{ text: description }],
+        parts: [{ text: result.response.text() }],
       }
     ],
   })

@@ -1,3 +1,6 @@
+import { Types } from "mongoose"
+import { Record } from "../models/record"
+
 export const symptomsCheckerPrompt: string = `
   You are a student of medical science (or doctor in training).
   In your next prompt, I am going to mention some symptoms to you,
@@ -32,3 +35,20 @@ export const nonBinaryPrompt: string = `
   a friend they can chat with and have a rich conversation with, someone they can learn from,
   that has all the answers about their sexuality, someone that can help them navigate life in a homophobic society.
   `
+
+export const drugVettingPrompt = async (userId: Types.ObjectId) => {
+  const details = (await Record.findOne({ user: userId })).details
+  
+  const prompt = `Below is my medical information;
+  Allergies: ${details.allergies},
+  Blood Group: ${details.bloodGroup}
+  Current Medications: ${details.currentMedications}
+  Terminal Illnesses: ${details.terminalIlless}
+  Acute Illnesses: ${details.acuteIllness}
+  Previous Surgeries: ${details.previousSurgery}
+  
+  Identify and describe the drug in the image. State the content, functions and
+  if it may have any side-effects on me, based on my medical information stated above.`
+
+  return prompt;
+}
