@@ -58,6 +58,8 @@ export const continueChat = async (symptoms: string, chatId: string) => {
     parts: [{ text: advice }]
   })
   await chat.save()
+
+  return advice;
 }
 
 export const getChatHistory = async (chatId: string) => {
@@ -105,6 +107,7 @@ export const drugVetting = async (userId: Types.ObjectId, file: Express.Multer.F
       }
     ],
   })
+  
   return await chat.save()
 }
 

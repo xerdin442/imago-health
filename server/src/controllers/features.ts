@@ -14,7 +14,7 @@ export const getChatHistory = async (req: Request, res: Response) => {
 
     const chatHistory = await Chat.getChatHistory(chatId)
 
-    return res.status(200).json(chatHistory).end()
+    return res.status(200).json({ chatHistory }).end()
   } catch (error) {
     console.log(error)
     return res.sendStatus(500)
@@ -62,9 +62,9 @@ export const healthAssistant = async (req: Request, res: Response) => {
     }
   
     const { symptoms } = req.body
-    await Chat.continueChat(symptoms, chatId)
+    const response = await Chat.continueChat(symptoms, chatId)
 
-    return res.sendStatus(200)
+    return res.status(200).json({ response })
   } catch (error) {
     console.log(error)
     return res.sendStatus(500)
@@ -92,7 +92,7 @@ export const getDrugDescription = async (req: Request, res: Response) => {
 
     const drugDescription = await Chat.getDrugDescription(chatId)
 
-    return res.status(200).json(drugDescription).end()
+    return res.status(200).json({ drugDescription }).end()
   } catch (error) {
     console.log(error)
     return res.sendStatus(500)
