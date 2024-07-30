@@ -6,7 +6,7 @@ import path from "path";
 import { Chat } from "../models/chat"
 import { drugVettingPrompt } from "../util/prompts";
 
-const genAI = new GoogleGenerativeAI('AIzaSyBaKaioMRVz-dwagdtapR3j08vpt7Mwkqo')
+const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY)
 const model = genAI.getGenerativeModel({ model: "gemini-1.5-pro" })
 
 export const createChat = async (userId: Types.ObjectId, prompt: string) => {
