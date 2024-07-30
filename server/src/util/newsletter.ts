@@ -3,7 +3,7 @@ import { GoogleGenerativeAI } from "@google/generative-ai"
 import { Newsletter } from "../models/newsletter";
 import { newsletterPrompt } from "./prompts";
 
-const createLetter = async () => {
+export const createLetter = async () => {
   try {
     const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY)
     const model = genAI.getGenerativeModel({ model: "gemini-1.5-pro" })
@@ -20,17 +20,6 @@ const createLetter = async () => {
     await newsletter.save()
 
     console.log('Newsletter published successfully!')
-  } catch (error) {
-    console.log(error)
-  }
-}
-
-export const publishLetter = async () => {
-  try {
-    const weekDay = new Date().getDay()
-    if (weekDay === 1 || weekDay === 5) {
-      await createLetter()
-    }
   } catch (error) {
     console.log(error)
   }

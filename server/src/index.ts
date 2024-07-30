@@ -11,7 +11,7 @@ import dotenv from 'dotenv';
 
 import initializeRoutes from './routes/index';
 import sessionDts from '../types/session'
-import { publishLetter } from './util/newsletter';
+import { createLetter } from './util/newsletter';
 
 const app = express()
 
@@ -42,10 +42,11 @@ app.use('/api', initializeRoutes()) // Configure routes
 
 // Connect to database and start the server
 mongoose.connect(process.env.MONGO_URI)
-  .then(async () => {
+  .then(() => {
     app.listen(process.env.PORT)
-    console.log(new Date())
-    await publishLetter()
+
+    // The model publishes a new article every five days
+    setInterval(() => { return createLetter() }, 5 * 24 * 60 * 60000)
 
     console.log('Server is running on port 3000')
   })
