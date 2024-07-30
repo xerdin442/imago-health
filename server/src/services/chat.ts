@@ -1,7 +1,5 @@
 import { GoogleGenerativeAI } from "@google/generative-ai"
 import { Types } from "mongoose"
-import fs from 'fs'
-import path from "path";
 
 import { Chat } from "../models/chat"
 import { drugVettingPrompt } from "../util/prompts";
@@ -74,30 +72,26 @@ export const getChatHistory = async (chatId: string) => {
 
 export const drugVetting = async (userId: Types.ObjectId, file: Express.Multer.File) => {
   // Converts local file information to a GoogleGenerativeAI.Part object.
-  function fileToGenerativePart(path: string, mimeType: string) {
+  function fileToGenerativePart(buffer: string, mimeType: string) {
     return {
       inlineData: {
-        data: Buffer.from(fs.readFileSync(path)).toString("base64"),
+        data: buffer,
         mimeType
       },
     };
   }
 
-  const filePath = path.join(__dirname, '../', `images/${file.originalname}`)
-  const mimeType = 'image/png' || 'image/jpg' || 'image/jpeg'
-  const imageParts = fileToGenerativePart(filePath, mimeType)
-  const prompt = await drugVettingPrompt(userId)
+  const imageBuffer = file.buffer.toString("base64") // Convert image buffer to string
+  const imageParts = fileToGenerativePart(imageBuffer, file.mimetype) // Prepare the image for use by the model
+  const prompt = await drugVettingPrompt(userId) // Generate the drug vetting prompt
   
+  // Pass the image and prompt to the model and generate a response
   const result = await model.generateContent([prompt, imageParts]);
   if (!result) {
     throw new Error('Error generating response')
   }
 
-  // Delete the image to free up memory space
-  fs.unlink(filePath, (err) => {
-    if (err) { throw new Error(err.message) }
-  })
-
+  // Create a chat and save the model's response to chat history
   const chat = new Chat({
     user: userId,
     history: [
@@ -107,7 +101,7 @@ export const drugVetting = async (userId: Types.ObjectId, file: Express.Multer.F
       }
     ],
   })
-  
+
   return await chat.save()
 }
 

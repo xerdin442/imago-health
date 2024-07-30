@@ -12,7 +12,7 @@ cloudinary.config({
 });
 
 export const upload = (folderName: string) => {
-  const imageMimetypes: string[] = ['image/png', 'image/jpg', 'image/jpeg']
+  const imageMimetypes: string[] = ['image/png', 'image/heic', 'image/jpeg', 'image/webp', 'image/heif']
 
   const cloudinaryStorage = new CloudinaryStorage({
     cloudinary: cloudinary,
@@ -44,33 +44,6 @@ export const upload = (folderName: string) => {
     fileFilter
   });
 };
-
-export const uploadDrug = () => {
-  const imageMimetypes: string[] = ['image/png', 'image/jpg', 'image/jpeg']
-
-  const localStorage = multer.diskStorage({
-    destination: (req, file, cb) => {
-      cb(null, 'src/images/')
-    },
-    filename: (req, file, cb) => {
-      cb(null, file.originalname)
-    }
-  })
-
-  const fileFilter = (req: Request, file: Express.Multer.File, cb: multer.FileFilterCallback) => {
-    if (imageMimetypes.includes(file.mimetype)) {
-      cb(null, true);
-    } else {
-      cb(null, false);
-    }
-  };
-
-  return multer({
-    storage: localStorage,
-    limits: { fieldSize: 5 * 1024 * 1024 }, // Image sizes must be less than 5MB
-    fileFilter
-  });
-}
 
 export const deleteUpload = (publicId: string) => {
   cloudinary.uploader.destroy(publicId, (error, result) => {
