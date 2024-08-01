@@ -61,8 +61,8 @@ export const healthAssistant = async (req: Request, res: Response) => {
       return res.status(400).json({ message: "Error loading chat details; invalid chat ID provided" })
     }
   
-    const { symptoms } = req.body
-    const response = await Chat.continueChat(symptoms, chatId)
+    const { userPrompt } = req.body
+    const response = await Chat.continueChat(userPrompt, chatId)
 
     return res.status(200).json({ response }).end()
   } catch (error) {
