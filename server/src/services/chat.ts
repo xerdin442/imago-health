@@ -100,27 +100,7 @@ export const drugVetting = async (userId: Types.ObjectId, file: Express.Multer.F
     throw new Error('Error generating response')
   }
 
-  // Create a chat and save the model's response to chat history
-  const chat = new Chat({
-    user: userId,
-    history: [
-      {
-        role: "model",
-        parts: [{ text: result.response.text() }],
-      }
-    ],
-  })
+  const description = result.response.text() // Extract the text from the model's response
 
-  return await chat.save()
-}
-
-export const getDrugDescription = async (chatId: string) => {
-  // Find chat by specified ID and throw an error if not found
-  const chat = await Chat.findById(chatId)
-  if (!chat) {
-    throw new Error('Chat details not found')
-  }
-  const history = chat.history[0].parts[0].text // Retrieve the description text from the chat history
-
-  return history;
+  return description;
 }

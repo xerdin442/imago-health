@@ -74,25 +74,9 @@ export const healthAssistant = async (req: Request, res: Response) => {
 export const drugVetting = async (req: Request, res: Response) => {
   try {
     const userId = req.session.user._id as Types.ObjectId
-    const chat = await Chat.drugVetting(userId, req.file)
+    const description = await Chat.drugVetting(userId, req.file)
 
-    return res.status(200).json({ chatId: chat._id }).end()
-  } catch (error) {
-    console.log(error)
-    return res.sendStatus(500)
-  }
-}
-
-export const getDrugDescription = async (req: Request, res: Response) => {
-  try {
-    const { chatId } = req.params
-    if (!Types.ObjectId.isValid(chatId)) {
-      return res.status(400).json({ message: "Error loading chat details; invalid chat ID provided" })
-    }
-
-    const drugDescription = await Chat.getDrugDescription(chatId)
-
-    return res.status(200).json({ drugDescription }).end()
+    return res.status(200).json({ description }).end()
   } catch (error) {
     console.log(error)
     return res.sendStatus(500)
