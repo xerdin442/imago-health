@@ -1,5 +1,6 @@
 import { Types } from "mongoose"
 import { Record } from "../models/record"
+import { Response } from "express"
 
 export const symptomsCheckerPrompt: string = `
   You are a student of medical science (or doctor in training).
@@ -49,8 +50,11 @@ export const newsletterPrompt: string = `You are content writer, working in the 
   Your article must end with a praragraph containing the words;
   "And until next time, stay safe and stay healthy!"`
 
-export const drugVettingPrompt = async (userId: Types.ObjectId) => {
+export const drugVettingPrompt = async (userId: Types.ObjectId, res: Response) => {
   const details = (await Record.findOne({ user: userId })).details
+  if (!details) {
+    return res.status(401).json({ message: "Medical records not found" })
+  }
   
   const prompt = `Below is my medical information;
   Allergies: ${details.allergies},

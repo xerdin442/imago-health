@@ -74,7 +74,7 @@ export const healthAssistant = async (req: Request, res: Response) => {
 export const drugVetting = async (req: Request, res: Response) => {
   try {
     const userId = req.session.user._id as Types.ObjectId
-    const description = await Chat.drugVetting(userId, req.file)
+    const description = await Chat.drugVetting(userId, req.file, res)
 
     return res.status(200).json({ description }).end()
   } catch (error) {
