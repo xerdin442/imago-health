@@ -1,6 +1,5 @@
 import { GoogleGenerativeAI } from "@google/generative-ai"
 import { Types } from "mongoose"
-import axios from "axios";
 import { Response } from "express";
 
 import { Chat } from "../models/chat"
@@ -79,7 +78,7 @@ export const getChatHistory = async (chatId: string) => {
   return history;
 }
 
-export const drugVetting = async (userId: Types.ObjectId, file: Express.Multer.File, res: Response) => {
+export const drugVetting = async (userId: Types.ObjectId, imageBuffer: string, res: Response) => {
   // Converts local file information to a GoogleGenerativeAI.Part object.
   function fileToGenerativePart(buffer: string, mimeType: string) {
     return {
@@ -90,9 +89,8 @@ export const drugVetting = async (userId: Types.ObjectId, file: Express.Multer.F
     };
   }
 
-  const response = await axios.get(file.path, { responseType: 'arraybuffer' }); // Download the image from cloudinary as a buffer
-  const imageBuffer = Buffer.from(response.data, 'binary').toString("base64") // Convert image buffer to string format
-  const imageParts = fileToGenerativePart(imageBuffer, file.mimetype) // Prepare the image for use by the model
+  const mimetype = 'image/png' || 'image/heic' || 'image/jpeg' || 'image/webp' || 'image/heif'
+  const imageParts = fileToGenerativePart(imageBuffer, mimetype) // Prepare the image for use by the model
   const prompt = await drugVettingPrompt(userId, res) // Generate the drug vetting prompt
   
   // Pass the image and prompt to the model and generate a response

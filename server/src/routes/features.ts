@@ -10,5 +10,5 @@ export default (router: express.Router) => {
   router.post('/launch-assistant', isLoggedIn, Feature.launchHealthAssistant)
   router.post('/ask-health-assistant/:chatId', isLoggedIn, Feature.healthAssistant);
 
-  router.post('/drug-vetting', upload('gemini-folder').single('drugImage'), isLoggedIn, Feature.drugVetting);
+  router.post('/drug-vetting', isLoggedIn, Feature.drugVetting);
 }
