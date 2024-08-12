@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:test/core/services/user_auth_services/register_services.dart';
 import 'package:test/core/utility/constants.dart';
-import 'package:test/widgets/popup/request_popup.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -70,7 +69,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         _isLoading = false;
       });
 
-      ShowPopUp().showPopUp(context);
+      Navigator.pushReplacementNamed(context, 'home');
     }
   }
 
