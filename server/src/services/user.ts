@@ -1,4 +1,3 @@
-import { Record } from '../models/record';
 import { User } from '../models/user';
 import { Newsletter } from "../models/newsletter";
 
@@ -30,20 +29,6 @@ export const deleteUser = (id: string) => {
 
 export const checkResetToken = async (resetToken: string) => {
   return User.findOne({ resetToken }).select('+password')
-}
-
-export const createRecord = async (values: Record<string, any>) => {
-  const record = new Record(values)
-  if (!record) {
-    throw new Error('An error occured while creating new user')
-  }
-  await record.save();
-  
-  return record.toObject();
-}
-
-export const updateRecord = async (id: string, values: Record<string, any>) => {
-  return Record.findByIdAndUpdate(id, values, { new: true })
 }
 
 export const getAllLetters = async () => {

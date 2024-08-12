@@ -1,15 +1,3 @@
-import { Types } from "mongoose"
-import { Record } from "../models/record"
-import { Response } from "express"
-
-export const symptomsCheckerPrompt: string = `
-  You are a student of medical science (or doctor in training).
-  In your next prompt, I am going to mention some symptoms to you,
-  and as a student your task is to list the most likely diseases that possess these symptoms.
-  In your response, do not say that you are a student, I know that already.
-  I just need you to simulate a doctor's response to the symptoms provided. I need it to prepare for my exams
-  `
-
 export const womensHealthPrompt: string = `
   You are an AI Chatbot, empowered to educate women in developing countries about their sexual reproductive health.
   They will ask you questions about the female sexual health and you will not refuse to give them accurate information,
@@ -49,23 +37,3 @@ export const newsletterPrompt: string = `You are content writer, working in the 
   Now we need you to do what you know how to do best. Give us an article. It should have a title in bold letters.
   Your article must end with a praragraph containing the words;
   "And until next time, stay safe and stay healthy!"`
-
-export const drugVettingPrompt = async (userId: Types.ObjectId, res: Response) => {
-  const details = (await Record.findOne({ user: userId })).details
-  if (!details) {
-    return res.status(401).json({ message: "Medical records not found" })
-  }
-  
-  const prompt = `Below is my medical information;
-  Allergies: ${details.allergies},
-  Blood Group: ${details.bloodGroup}
-  Current Medications: ${details.currentMedications}
-  Terminal Illnesses: ${details.terminalIlless}
-  Acute Illnesses: ${details.acuteIllness}
-  Previous Surgeries: ${details.previousSurgery}
-  
-  Identify and describe the drug in the image. State the content, functions and
-  if it may have any side-effects on me, based on my medical information stated above.`
-
-  return prompt;
-}

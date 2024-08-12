@@ -1,9 +1,7 @@
 import { GoogleGenerativeAI } from "@google/generative-ai"
 import { Types } from "mongoose"
-import { Response } from "express";
 
 import { Chat } from "../models/chat"
-import { drugVettingPrompt } from "../util/prompts";
 
 const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY)
 const model = genAI.getGenerativeModel({ model: "gemini-1.5-pro" })
@@ -78,7 +76,7 @@ export const getChatHistory = async (chatId: string) => {
   return history;
 }
 
-export const drugVetting = async (userId: Types.ObjectId, imageBuffer: string, res: Response) => {
+export const drugVetting = async (imageBuffer: string) => {
   // Converts local file information to a GoogleGenerativeAI.Part object.
   function fileToGenerativePart(buffer: string, mimeType: string) {
     return {
@@ -91,10 +89,9 @@ export const drugVetting = async (userId: Types.ObjectId, imageBuffer: string, r
 
   const mimetype = 'image/png' || 'image/heic' || 'image/jpeg' || 'image/webp' || 'image/heif'
   const imageParts = fileToGenerativePart(imageBuffer, mimetype) // Prepare the image for use by the model
-  const prompt = await drugVettingPrompt(userId, res) // Generate the drug vetting prompt
   
-  // Pass the image and prompt to the model and generate a response
-  const result = await model.generateContent([prompt as string, imageParts]);
+  // Pass the image to the model and generate a response
+  const result = await model.generateContent([imageParts]);
   if (!result) {
     throw new Error('Error generating response')
   }

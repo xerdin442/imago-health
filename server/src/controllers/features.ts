@@ -24,13 +24,10 @@ export const getChatHistory = async (req: Request, res: Response) => {
 export const launchHealthAssistant = async (req: Request, res: Response) => {
   try {
     const userId = req.session.user._id as Types.ObjectId
-    const { symptoms, womensHealth, addiction, emergency, nonBinary } = req.query
+    const { womensHealth, addiction, emergency, nonBinary } = req.query
     let chat: IChat;
 
-    if (symptoms || womensHealth || addiction || emergency || nonBinary) {
-      if (symptoms) {
-        chat = await Chat.createChat(userId, prompt.symptomsCheckerPrompt)
-      }
+    if (womensHealth || addiction || emergency || nonBinary) {
       if (womensHealth) {
         chat = await Chat.createChat(userId, prompt.womensHealthPrompt)
       }
@@ -73,10 +70,9 @@ export const healthAssistant = async (req: Request, res: Response) => {
 
 export const drugVetting = async (req: Request, res: Response) => {
   try {
-    const userId = req.session.user._id as Types.ObjectId
     const { drugImage } = req.body
 
-    const description = await Chat.drugVetting(userId, drugImage, res)
+    const description = await Chat.drugVetting(drugImage)
 
     return res.status(200).json({ description }).end()
   } catch (error) {

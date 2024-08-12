@@ -10,10 +10,6 @@ export default (router: express.Router) => {
   router.put('/users/:userId/update-profile', upload('gemini-folder').single('profileImage'), isAuthenticated, validateUpdateProfile, handleValidationErrors, User.updateProfile)
   router.delete('/users/:userId/delete-account', isAuthenticated, User.deleteUser)
 
-  // Medical records
-  router.post('/records/create-record',  User.createMedicalRecord)
-  router.put('/records/:recordId/update-record', User.updateMedicalRecord)
-
   // Newsletter
   router.get('/newsletters', isLoggedIn, User.getAllLetters)
   router.get('/newsletters/:newsletterId', isLoggedIn, User.getLetter)

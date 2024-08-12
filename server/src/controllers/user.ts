@@ -64,48 +64,6 @@ export const deleteUser = async (req: Request, res: Response) => {
   }
 }
 
-export const createMedicalRecord = async (req: Request, res: Response) => {
-  try {
-    const { age, gender, country, allergies, bloodGroup, terminalIlless, acuteIllness, currentMedications, previousSurgery } = req.body
-    const details = { age, gender, country, allergies, bloodGroup, terminalIlless, acuteIllness, currentMedications, previousSurgery }
-
-    const medicalRecord = await User.createRecord({
-      user: req.session.user._id as Types.ObjectId,
-      details
-    })
-
-    return res.status(200).json({
-      message: "Your medical records have been successfully saved. You can change this informtion anytime in the settings page",
-      medicalRecord
-    }).end()
-  } catch (error) {
-    console.log(error)
-    return res.sendStatus(500)
-  }
-}
-
-export const updateMedicalRecord = async (req: Request, res: Response) => {
-  try {
-    const { recordId } = req.params
-    if (!Types.ObjectId.isValid(recordId)) {
-      return res.status(400).json({ message: "Invalid record ID" })
-    }
-
-    const { age, gender, country, allergies, bloodGroup, terminalIlless, acuteIllness, currentMedications, previousSurgery } = req.body
-    const details = { age, gender, country, allergies, bloodGroup, terminalIlless, acuteIllness, currentMedications, previousSurgery }
-
-    const medicalRecord = await User.updateRecord(recordId, {
-      user: req.session.user._id as Types.ObjectId,
-      details
-    })
-
-    return res.status(200).json({ message: "Your medical records have been updated!", medicalRecord }).end()
-  } catch (error) {
-    console.log(error)
-    return res.sendStatus(500)
-  }
-}
-
 export const getAllLetters = async (req: Request, res: Response) => {
   try {
     const newsletters = await User.getAllLetters()
