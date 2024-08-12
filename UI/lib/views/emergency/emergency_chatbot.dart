@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -28,6 +30,8 @@ class _ChatBotState extends State<EmergencyChatbot> {
 
   @override
   void dispose() {
+    Provider.of<EmergencyChatHistoryProvider>(context, listen: false)
+        .clearEmergencyChatHistory();
     _messageController.dispose();
     super.dispose();
   }
@@ -65,7 +69,7 @@ class _ChatBotState extends State<EmergencyChatbot> {
       // Send the user's message to the server and fetch AI's response
       final emergencyChatService =
           EmergencyChatService(chatIdProvider, chatHistoryProvider);
-      await emergencyChatService.askAssitant(
+      await emergencyChatService.askAssistant(
         {
           "emergency": chatMessage.content,
         },

@@ -3,7 +3,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:test/core/services/drug%20vetting%20service/upload_description_service.dart';
 import 'package:test/core/services/drug%20vetting%20service/upload_image_service.dart';
 import 'package:test/core/utility/constants.dart';
 import 'package:test/widgets/build_title.dart';
@@ -237,7 +236,7 @@ class _DrugVettingScreenState extends State<DrugVettingScreen> {
                 }
               },
               child: _isLoading
-                  ? const CupertinoActivityIndicator()
+                  ? const CupertinoActivityIndicator() 
                   : Text(
                       AppLocalizations.of(context)!.uploadImage,
                       style: TextStyle(
@@ -246,81 +245,6 @@ class _DrugVettingScreenState extends State<DrugVettingScreen> {
                     ),
             ),
         ],
-      ),
-    );
-  }
-
-  Widget _buildTextCard(BuildContext context) {
-    return Container(
-      height: 280.h,
-      width: 360.w,
-      decoration: BoxDecoration(
-        color: appColorLightPurple,
-        borderRadius: BorderRadius.all(Radius.circular(20.r)),
-      ),
-      child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 20.w),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              "Aa",
-              style: fontStyle.copyWith(
-                color: appColorWhite,
-                fontSize: 60.sp,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            Text(
-              textAlign: TextAlign.center,
-              AppLocalizations.of(context)!.inputDescription,
-              style: fontStyle.copyWith(color: appColorWhite, fontSize: 20.sp),
-            ),
-            Padding(
-              padding: EdgeInsets.all(12.dm),
-              child: Container(
-                height: 55.0.h,
-                decoration: BoxDecoration(
-                  color: appColorWhite,
-                  borderRadius: BorderRadius.circular(16.0.r),
-                ),
-                padding: EdgeInsets.symmetric(horizontal: 18.w),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: Padding(
-                        padding: EdgeInsets.only(left: 10.w),
-                        child: TextFormField(
-                          onChanged: (value) {},
-                          controller: _messageController,
-                          focusNode: _messageFocusNode,
-                          decoration: InputDecoration(
-                            hintText: AppLocalizations.of(context)!.inputHint,
-                            border: InputBorder.none,
-                            contentPadding:
-                                EdgeInsets.symmetric(vertical: 15.0.h),
-                          ),
-                        ),
-                      ),
-                    ),
-                    if (_messageHasData)
-                      InkWell(
-                        onTap: () {
-                          UploadDescriptionService().uploadDescription({
-                            "userPrompt": _messageController.text,
-                          }, context);
-                        },
-                        child: const Icon(
-                          Icons.send,
-                          color: appColorDarkPurple,
-                        ),
-                      ),
-                  ],
-                ),
-              ),
-            ),
-          ],
-        ),
       ),
     );
   }

@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:http/http.dart' as http;
+import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginServices {
@@ -10,19 +10,24 @@ class LoginServices {
     String url = "https://imago-health.onrender.com/api/auth/login";
 
     try {
-      final response = await http.post(
-        Uri.parse(url),
-        headers: {'Content-Type': 'application/json'},
-        body: jsonEncode(body),
+      Dio dio = Dio();
+
+      final response = await dio.post(
+        url,
+        data: jsonEncode(body),
+        options: Options(
+          headers: {'Content-Type': 'application/json'},
+          followRedirects: false,
+        ),
       );
 
       if (response.statusCode == 200) {
         print("Login successful!");
         print("Your status code is ${response.statusCode}");
-        print(response.body);
+        print(response.data);
 
         // Extract the session cookie from the response headers
-        final sessionCookie = response.headers['set-cookie'];
+        final sessionCookie = response.headers['set-cookie']?.first;
         if (sessionCookie != null) {
           // Save the session cookie
           SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -32,11 +37,11 @@ class LoginServices {
         // Optionally save login status
         SharedPreferences prefs = await SharedPreferences.getInstance();
         await prefs.setBool('isLoggedIn', true);
-        
+
         return;
       } else {
         print("Your status code is ${response.statusCode}");
-        print(response.body);
+        print(response.data);
       }
     } catch (e) {
       print("An error occurred: $e");

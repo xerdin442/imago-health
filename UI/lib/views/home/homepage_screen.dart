@@ -3,13 +3,11 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:test/core/services/chat%20id%20services/emergency_chat_id_service.dart';
 import 'package:test/core/services/chat%20id%20services/non_binary_chat_id_service.dart';
-import 'package:test/core/services/chat%20id%20services/symptom_chat_id_service.dart';
 import 'package:test/core/services/chat%20id%20services/women_health_chat_id_service.dart';
 import 'package:test/core/utility/constants.dart';
 import 'package:test/view%20model/addiction%20view%20model/addition_chat_id_provider.dart';
 import 'package:test/view%20model/emegency%20view%20model/emergency_chat_id_provider.dart';
 import 'package:test/view%20model/non%20binary%20view%20model/non_binary_chat_id_provider.dart';
-import 'package:test/view%20model/symptom%20view%20model/symptom_chat_id_provider.dart';
 import 'package:test/view%20model/women%20health%20view%20model/women_health_chat_id_provider.dart';
 import 'package:test/widgets/build_title.dart';
 import 'package:test/widgets/colored_card.dart';
@@ -29,7 +27,6 @@ class _HomepageScreenState extends State<HomepageScreen> {
 
   List<String> imageLinks = [
     "assets/images/emergency.png",
-    "assets/images/mdi_doc.png",
     "assets/images/drugs.png",
     "assets/images/non-binary.png",
     "assets/images/female-icon.png",
@@ -42,7 +39,6 @@ class _HomepageScreenState extends State<HomepageScreen> {
   List<Color> cardColors = [
       appColorDarkPurple,
       appColorLightPurple,
-      appColorLightPurple,
       appColorDarkPurple,
       appColorDarkPurple,
       appColorLightPurple,
@@ -53,7 +49,6 @@ class _HomepageScreenState extends State<HomepageScreen> {
     
   List<String> routes = [
       "emergency",
-      "symptomChatBot",
       "vetdrug",
       "nonBinary",
       "womenHealth",
@@ -72,7 +67,6 @@ class _HomepageScreenState extends State<HomepageScreen> {
     final localizations = AppLocalizations.of(context)!;
        List<String> cardText = [
       localizations.emergency,
-      localizations.symptomChecker,
       localizations.vetDrug,
       localizations.nonBinaryMentalHealth,
       localizations.womensHealth,
@@ -82,7 +76,6 @@ class _HomepageScreenState extends State<HomepageScreen> {
     ];
     final emergencyChatIdProvider =
         Provider.of<EmergencyChatIdProvider>(context);
-    final symptomsChatIdProvider = Provider.of<SymptomChatIdProvider>(context);
     final addictionChatIdProvider =
         Provider.of<AddictionChatIdProvider>(context);
     final nonBinaryChatIdProvider =
@@ -93,8 +86,6 @@ class _HomepageScreenState extends State<HomepageScreen> {
     final List<Function> functions = [
       () async =>
           await EmergencyChatIdService(emergencyChatIdProvider).getChatId(),
-      () async => await SymptomCheckerChatIdServices(symptomsChatIdProvider)
-          .getChatId(),
       () async => Navigator.pushNamed(context, 'vetdrug'),
       () async =>
           await NonBinaryChatIdService(nonBinaryChatIdProvider).getChatId(),

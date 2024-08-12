@@ -70,7 +70,7 @@ class ColoredCard extends StatelessWidget {
                           Icons.arrow_forward,
                           color: appColorWhite,
                         ),
-                      )
+                      ),
               ],
             ),
           ),

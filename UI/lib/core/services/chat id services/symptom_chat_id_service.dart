@@ -1,5 +1,4 @@
-import 'dart:convert';
-import 'package:http/http.dart' as http;
+import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:test/view%20model/symptom%20view%20model/symptom_chat_id_provider.dart';
 
@@ -11,8 +10,7 @@ class SymptomCheckerChatIdServices {
   Future<void> getChatId() async {
     String url =
         "https://imago-health.onrender.com/api/launch-assistant?symptoms=true";
-    String? sessionCookie =
-        await _retrieveSessionCookie(); // Retrieve the session cookie
+    String? sessionCookie = await _retrieveSessionCookie();
 
     if (sessionCookie == null) {
       print("Session cookie is not available.");
@@ -20,19 +18,24 @@ class SymptomCheckerChatIdServices {
     }
 
     try {
-      final response = await http.post(
-        Uri.parse(url),
-        headers: {
-          'Content-Type': 'application/json',
-          'Cookie': sessionCookie, // Include the session cookie
-        },
+      Dio dio = Dio();
+
+      final response = await dio.post(
+        url,
+        options: Options(
+          headers: {
+            'Content-Type': 'application/json',
+            'Cookie': sessionCookie,
+          },
+          followRedirects: false,
+        ),
       );
 
       if (response.statusCode == 200) {
         print("Chat Id generated successfully!");
 
-        // Parse the response body
-        final Map<String, dynamic> responseData = json.decode(response.body);
+        // Parse the response data
+        final Map<String, dynamic> responseData = response.data;
         String? chatId = responseData['chatId'];
         print("Chat Id: $chatId");
 
@@ -40,7 +43,7 @@ class SymptomCheckerChatIdServices {
         chatIdProvider.setSymptomChatId(chatId);
       } else {
         print("Status code: ${response.statusCode}");
-        print("Response body: ${response.body}");
+        print("Response body: ${response.data}");
       }
     } catch (e) {
       print("An error occurred: $e");
@@ -52,5 +55,3 @@ class SymptomCheckerChatIdServices {
     return prefs.getString('sessionCookie');
   }
 }
-
-

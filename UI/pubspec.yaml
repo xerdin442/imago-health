@@ -38,7 +38,6 @@ dependencies:
   smooth_page_indicator: ^1.1.0
   carousel_slider: ^4.2.1
   provider: ^6.1.2
-  http: ^1.2.2
   shared_preferences: ^2.2.3
   image_picker: ^1.1.2
   dio: ^5.5.0+1
