@@ -27,7 +27,7 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
     _messageFocusNode.addListener(_onFocusChange);
     _messageController.addListener(_onTextChanged);
   }
-
+  
   @override
   void dispose() {
     _messageFocusNode.dispose();
@@ -79,7 +79,7 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
       // Send the user's message to the server and fetch AI's response
       final emergencyChatServices =
           EmergencyChatService(chatIdProvider, chatHistoryProvider);
-      await emergencyChatServices.askAssitant(
+      await emergencyChatServices.askAssistant(
         {
           "userPrompt": chatMessage.content,
         },
@@ -113,7 +113,7 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
     // Send the user's message to the server and fetch AI's response
     final emergencyChatServices =
         EmergencyChatService(chatIdProvider, chatHistoryProvider);
-    await emergencyChatServices.askAssitant(
+    await emergencyChatServices.askAssistant(
       {
         "userPrompt": chatMessage.content,
       },

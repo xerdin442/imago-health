@@ -11,4 +11,8 @@ class DrugVettingChatProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  void clearDrugVettingChatHistory() {
+    _drugVettingChatHistory.clear();
+    notifyListeners();
+  }
 }

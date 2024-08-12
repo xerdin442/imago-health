@@ -11,6 +11,11 @@ class EmergencyChatHistoryProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  void clearEmergencyChatHistory() {
+    _emergencyChatHistory.clear();
+    notifyListeners();
+  }
+
   void setEmergencyChatHistory(List<ChatMessage> emergencyChatHistory) {
     _emergencyChatHistory = emergencyChatHistory;
     notifyListeners();

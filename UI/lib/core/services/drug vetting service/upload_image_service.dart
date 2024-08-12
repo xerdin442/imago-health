@@ -1,12 +1,11 @@
-import 'dart:convert'; // Import for base64 encoding
-import 'dart:io'; // Import for working with files
+import 'dart:convert';
+import 'dart:io'; 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:test/models/chat%20model/chat_model.dart';
-
 import '../../../view model/drug vetting view model/drug_vetting_chat_provider.dart';
 
 class UploadImageService {

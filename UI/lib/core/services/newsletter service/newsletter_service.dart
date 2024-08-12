@@ -17,7 +17,7 @@ class NewsletterService {
       print("Session cookie is not available.");
       return;
     }
-
+    
     dio.options.headers = {
       "Cookie": sessionCookie,
     };

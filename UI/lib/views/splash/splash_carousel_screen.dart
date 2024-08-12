@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:test/core/utility/config.dart';
 import 'package:test/core/utility/constants.dart';
@@ -14,11 +13,10 @@ class SplashCarouselScreen extends StatefulWidget {
 }
 
 class _SplashCarouselScreenState extends State<SplashCarouselScreen> {
-  final CarouselController _carouselController = CarouselController();
+  final PageController _pageController = PageController();
   int _currentIndex = 0;
 
   List<Widget> _carouselItems = [];
-  
 
   @override
   void didChangeDependencies() {
@@ -71,28 +69,48 @@ class _SplashCarouselScreenState extends State<SplashCarouselScreen> {
       body: SizedBox(
         height: deviceHeight(context),
         width: deviceWidth(context),
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              CarouselSlider(
-                items: _carouselItems,
-                carouselController: _carouselController,
-                options: CarouselOptions(
-                  enlargeCenterPage: true,
-                  height: 700.h,
-                  viewportFraction: 1,
-                  onPageChanged: (index, reason) {
-                    setState(() {
-                      _currentIndex = index;
-                    });
-                  },
-                ),
-              ),
-              _buildIndicatorAndButton(),
-            ],
-          ),
+        child: Stack(
+          children: [
+            PageView.builder(
+              controller: _pageController,
+              itemCount: _carouselItems.length,
+              onPageChanged: (index) {
+                setState(() {
+                  _currentIndex = index;
+                });
+              },
+              itemBuilder: (context, index) {
+                return _buildAnimatedPage(_carouselItems[index], _currentIndex, index);
+              },
+            ),
+            Positioned(
+              bottom: 20.h,
+              left: 0,
+              right: 0,
+              child: _buildIndicatorAndButton(),
+            ),
+          ],
         ),
       ),
+    );
+  }
+
+  Widget _buildAnimatedPage(Widget page, int currentIndex, int pageIndex) {
+    final double pageOffset = (pageIndex - currentIndex).toDouble();
+    return AnimatedBuilder(
+      animation: _pageController,
+      builder: (context, child) {
+        double scale = 1 - (0.1 * pageOffset.abs());
+        double opacity = 1 - (0.3 * pageOffset.abs());
+        return Transform.scale(
+          scale: scale,
+          child: Opacity(
+            opacity: opacity,
+            child: page,
+          ),
+        );
+      },
+      child: page,
     );
   }
 
@@ -141,8 +159,8 @@ class _SplashCarouselScreenState extends State<SplashCarouselScreen> {
             _navigateToNextScreen();
           } else {
             // Otherwise, go to the next page
-            _carouselController.nextPage(
-              duration: const Duration(milliseconds: 600),
+            _pageController.nextPage(
+              duration: const Duration(milliseconds: 900),
               curve: Curves.easeInOut,
             );
           }

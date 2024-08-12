@@ -28,6 +28,8 @@ class _ChatBotState extends State<SymptomChatBot> {
 
   @override
   void dispose() {
+    Provider.of<SymptomChatHistoryProvider>(context, listen: false)
+        .clearSymptomChatHistory();
     _messageController.dispose();
     super.dispose();
   }

@@ -30,6 +30,9 @@ class _ChatBotState extends State<DrugVettingChatbot> {
   void dispose() {
     _messageFocusNode.dispose();
     _messageController.dispose();
+    Provider.of<DrugVettingChatProvider>(context, listen: false)
+        .clearDrugVettingChatHistory();
+
     super.dispose();
   }
 
@@ -72,8 +75,7 @@ class _ChatBotState extends State<DrugVettingChatbot> {
           ),
         ),
       ),
-      resizeToAvoidBottomInset:
-          true, 
+      resizeToAvoidBottomInset: true,
       body: SafeArea(
         child: Column(
           children: [

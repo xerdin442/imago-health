@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
+import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:test/models/chat%20model/chat_model.dart';
 import 'package:test/view%20model/women%20health%20view%20model/women_health_chat_history_provider.dart';
@@ -27,18 +27,21 @@ class WomenHealthChatService {
 
     try {
       print("send function called");
-      final response = await http.post(
-        Uri.parse(url),
-        headers: {
-          'Content-Type': 'application/json',
-          'Cookie': sessionCookie,
-        },
-        body: jsonEncode(body),
+      
+      Dio dio = Dio();
+      dio.options.headers = {
+        'Content-Type': 'application/json',
+        'Cookie': sessionCookie,
+      };
+
+      final response = await dio.post(
+        url,
+        data: jsonEncode(body),
       );
 
       if (response.statusCode == 200) {
-        print("message sent to ai successfully");
-        final Map<String, dynamic> responseData = json.decode(response.body);
+        print("Message sent to AI successfully");
+        final Map<String, dynamic> responseData = response.data;
         String chatResponse =
             responseData['response'].replaceAll(RegExp(r'[*_#~`>|-]'), '');
         print("AI response: $chatResponse");
@@ -53,10 +56,9 @@ class WomenHealthChatService {
         chatHistoryProvider.addwomenHealthsMessage(aiMessage);
       } else {
         print("Status code: ${response.statusCode}");
-        print("Response body: ${response.body}");
+        print("Response data: ${response.data}");
         final aiMessage = ChatMessage(
-          content:
-              "Could generate response, check your internet connection and try again",
+          content: "Couldn't generate response, check your internet connection and try again",
           sender: Sender.ai,
         );
         chatHistoryProvider.addwomenHealthsMessage(aiMessage);
@@ -64,8 +66,7 @@ class WomenHealthChatService {
     } catch (e) {
       print("An error occurred: $e");
       final aiMessage = ChatMessage(
-        content:
-            "Could generate response, check your internet connection and try again",
+        content: "Couldn't generate response, check your internet connection and try again",
         sender: Sender.ai,
       );
       chatHistoryProvider.addwomenHealthsMessage(aiMessage);

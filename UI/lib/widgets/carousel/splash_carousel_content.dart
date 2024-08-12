@@ -3,11 +3,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:test/core/utility/constants.dart';
 
 class CarouselContent extends StatelessWidget {
-  const CarouselContent(
-      {super.key,
-      required this.imageLink,
-      required this.imgtext,
-      required this.imgDesc});
+  const CarouselContent({
+    super.key,
+    required this.imageLink,
+    required this.imgtext,
+    required this.imgDesc,
+  });
 
   final String imageLink;
   final String imgtext;

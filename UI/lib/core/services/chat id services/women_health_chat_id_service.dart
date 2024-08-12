@@ -1,12 +1,13 @@
-import 'dart:convert';
-import 'package:http/http.dart' as http;
+import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:test/view%20model/women%20health%20view%20model/women_health_chat_id_provider.dart';
 
 class WomenHealthChatIdService {
   final WomenHealthChatIdProvider chatIdProvider;
+  final Dio dio;
 
-  WomenHealthChatIdService(this.chatIdProvider);
+  WomenHealthChatIdService(this.chatIdProvider, {Dio? dioInstance})
+      : dio = dioInstance ?? Dio();
 
   Future<void> getChatId() async {
     String url =
@@ -20,19 +21,21 @@ class WomenHealthChatIdService {
 
     try {
       print("Process started");
-      final response = await http.post(
-        Uri.parse(url),
-        headers: {
-          'Content-Type': 'application/json',
-          'Cookie': sessionCookie,
-        },
+      final response = await dio.post(
+        url,
+        options: Options(
+          headers: {
+            'Content-Type': 'application/json',
+            'Cookie': sessionCookie,
+          },
+        ),
       );
 
       if (response.statusCode == 200) {
         print("Chat Id generated successfully!");
 
         // Parse the response body
-        final Map<String, dynamic> responseData = json.decode(response.body);
+        final Map<String, dynamic> responseData = response.data;
         String? chatId = responseData['chatId'];
         print("Chat Id: $chatId");
 
@@ -40,7 +43,7 @@ class WomenHealthChatIdService {
         chatIdProvider.setwomenHealthChatId(chatId);
       } else {
         print("Status code: ${response.statusCode}");
-        print("Response body: ${response.body}");
+        print("Response body: ${response.data}");
       }
     } catch (e) {
       print("An error occurred: $e");
