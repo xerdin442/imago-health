@@ -10,10 +10,12 @@ class LanguageSwitcher extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        children: [
-          Center(
-            child: Container(
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
               decoration: BoxDecoration(
                   color: appColorLightGrey,
                   borderRadius: BorderRadius.all(Radius.circular(10.r))),
@@ -43,12 +45,16 @@ class LanguageSwitcher extends StatelessWidget {
                 ),
               ),
             ),
-          ),
-          Text(
-            "Note some part of the app may remain fundamentally in English",
-            style: TextStyle(color: appColorDarkPurple, fontSize: 15.sp),
-          )
-        ],
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 40.w),
+              child: Text(
+                textAlign: TextAlign.center,
+                "Note some part of the app may remain fundamentally in English",
+                style: TextStyle(color: appColorDarkPurple, fontSize: 15.sp),
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
