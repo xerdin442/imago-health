@@ -8,7 +8,6 @@ import 'package:test/view%20model/addiction%20view%20model/addition_chat_id_prov
 import 'package:test/view%20model/drug%20vetting%20view%20model/drug_vetting_chat_provider.dart';
 import 'package:test/view%20model/emegency%20view%20model/emergency_chat_history_provider.dart';
 import 'package:test/view%20model/emegency%20view%20model/emergency_chat_id_provider.dart';
-import 'package:test/view%20model/medical%20record%20view%20model/medical_record_provider.dart';
 import 'package:test/view%20model/newsletter%20view%20model/newsletter_provider.dart';
 import 'package:test/view%20model/non%20binary%20view%20model/non_binary_chat_history_provider.dart';
 import 'package:test/view%20model/non%20binary%20view%20model/non_binary_chat_id_provider.dart';
@@ -18,8 +17,6 @@ import 'package:test/view%20model/women%20health%20view%20model/women_health_cha
 import 'package:test/view%20model/women%20health%20view%20model/women_health_chat_id_provider.dart';
 import 'package:test/views/addiction/addition_chatbot.dart';
 import 'package:test/views/auth/login_screen.dart';
-import 'package:test/views/auth/medical_record_screen1.dart';
-import 'package:test/views/auth/medical_record_screen2.dart';
 import 'package:test/views/auth/register_screen.dart';
 import 'package:test/views/auth/welcome_screen.dart';
 import 'package:test/views/drug%20vetting/drug_vetting_chatbot.dart';
@@ -55,9 +52,6 @@ void main() {
         ),
         ChangeNotifierProvider(
           create: (context) => EmergencyChatIdProvider(),
-        ),
-        ChangeNotifierProvider(
-          create: (context) => MedicalRecordProvider(),
         ),
         ChangeNotifierProvider(
           create: (context) => DrugVettingChatProvider(),
@@ -127,8 +121,6 @@ class MyApp extends StatelessWidget {
               'option': (context) => const WelcomeScreen(),
               'login': (context) => const LoginScreen(),
               'register': (context) => const RegisterScreen(),
-              'record1': (context) => MedicalRecordScreen1(),
-              'record2': (context) => const MedicalRecordScreen2(),
               'homepage': (context) => HomepageScreen(),
               'home': (context) => const Home(),
               'symptomChatBot': (context) => const SymptomChatBot(),
